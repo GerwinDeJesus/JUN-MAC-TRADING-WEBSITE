@@ -1,10 +1,9 @@
 "use client";
 
-import { MdDashboard, MdManageAccounts } from "react-icons/md";
+import Image from "next/image";
+import { MdDashboard } from "react-icons/md";
 import { GrTransaction } from "react-icons/gr";
-import { IoAnalytics, IoSettings } from "react-icons/io5";
 import { RiShoppingCartLine } from "react-icons/ri";
-
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -14,22 +13,22 @@ const menus = [
     icon: <MdDashboard />,
     href: "/admin/dashboard",
   },
-   {
+  {
     title: "Add Product",
     icon: <RiShoppingCartLine />,
     href: "/admin/products",
   },
-   {
+  {
     title: "Sold Product",
     icon: <MdDashboard />,
     href: "/admin/sell_product",
   },
-     {
+  {
     title: "Low Stock",
     icon: <MdDashboard />,
     href: "/admin/lowstock",
   },
-       {
+  {
     title: "Zero Stock",
     icon: <MdDashboard />,
     href: "/admin/zero_stock",
@@ -39,7 +38,6 @@ const menus = [
     icon: <GrTransaction />,
     href: "/admin/transactions",
   },
-
 ];
 
 const Sidebar = () => {
@@ -48,7 +46,14 @@ const Sidebar = () => {
   return (
     <div className="bg-white w-[300px] min-h-screen p-4 shrink-0">
       <div className="flex items-center gap-4">
-        <img className="size-12 rounded-lg" src="/blacklogo.png" alt="logo" />
+        <Image
+          src="/blacklogo.png"
+          alt="logo"
+          width={48}    // Adjust size as needed
+          height={48}
+          className="rounded-lg"
+          priority       // optional: loads faster for above-the-fold images
+        />
         <h2 className="text-[20px] font-semibold">JUN-MAC TRADING</h2>
       </div>
 
