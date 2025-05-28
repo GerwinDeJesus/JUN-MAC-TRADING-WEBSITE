@@ -26,15 +26,16 @@ const Dashboard = () => {
 
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    dispatch(setLoading(true));
+ useEffect(() => {
+  dispatch(setLoading(true));
 
-    axios
-      .get("/api/get_products")
-      .then((res) => setProducts(res.data))
-      .catch((err) => console.log(err))
-      .finally(() => dispatch(setLoading(false)));
-  }, [updateTable]);
+  axios
+    .get("/api/get_products")
+    .then((res) => setProducts(res.data))
+    .catch((err) => console.log(err))
+    .finally(() => dispatch(setLoading(false)));
+}, [updateTable, dispatch]);
+
 
   return (
     <div>
