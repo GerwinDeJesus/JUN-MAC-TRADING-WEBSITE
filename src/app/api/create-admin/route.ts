@@ -1,33 +1,33 @@
-// pages/api/create-admin.ts (or app/api/create-admin/route.ts for app router)
-import { NextApiRequest, NextApiResponse } from "next";
+// app/api/create-admin/route.ts
+import { NextRequest, NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
 import bcrypt from "bcryptjs";
 
 const client = new MongoClient(process.env.MONGO_URI!);
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== "POST") return res.status(405).end();
-
-  // Add a simple secret key check to protect this route
-  if (req.headers.authorization !== `Bearer ${process.env.ADMIN_CREATION_SECRET}`) {
-    return res.status(401).json({ message: "Unauthorized" });
+export async function POST(req: NextRequest) {
+  const authHeader = req.headers.get("authorization");
+  if (authHeader !== `Bearer ${process.env.ADMIN_CREATION_SECRET}`) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
 
   try {
     await client.connect();
     const db = client.db();
 
-    const { name, email, password } = req.body;
+    const body = await req.json();
+    const { name, email, password } = body;
+
     if (!email || !password || !name) {
-      return res.status(400).json({ message: "Missing fields" });
+      return NextResponse.json({ message: "Missing fields" }, { status: 400 });
     }
 
     const hashedPassword = bcrypt.hashSync(password, 10);
     const result = await db.collection("users").insertOne({ name, email, password: hashedPassword });
 
-    res.status(201).json({ message: "Admin created", id: result.insertedId });
+    return NextResponse.json({ message: "Admin created", id: result.insertedId }, { status: 201 });
   } catch (error) {
-    res.status(500).json({ message: "Error creating admin", error });
+    return NextResponse.json({ message: "Error creating admin", error }, { status: 500 });
   } finally {
     await client.close();
   }
