@@ -124,13 +124,14 @@ const ProductForm = () => {
       </div>
         <div>
           <label className="block ml-1">Description</label>
-          <textarea
+            <textarea
             className="bg-gray-300 w-full px-4 py-2 border outline-pink rounded-md resize-y"
             rows={5}
-            value={payload.definition}
+            value={payload.description}   // <-- FIXED here
             onChange={(e) => setPayload({ ...payload, description: e.target.value })}
             required
           />
+
         </div>
 
       <div className="flex justify-end">
