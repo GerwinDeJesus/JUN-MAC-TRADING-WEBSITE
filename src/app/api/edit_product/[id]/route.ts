@@ -1,29 +1,31 @@
-import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "@/libs/MongoConnect";
 import Product from "@/libs/models/Product";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(request: NextRequest, URLParams: any) {
   try {
-    const { id } = params;
     const body = await request.json();
+    const id = URLParams.params.id;
+    const { name, category, price, stock, description } = body;
 
     await connectMongoDB();
 
-    const updatedProduct = await Product.findByIdAndUpdate(id, body, { new: true });
+    console.log(id, name, category, price, stock, description);
 
-    return NextResponse.json({
-      msg: "Product Updated Successfully",
-      data: updatedProduct,
+    const data = await Product.findByIdAndUpdate(id, {
+      name,
+      category,
+      price,
+      stock,
+      description,
     });
+
+    return NextResponse.json({ msg: "Product Updated Successfully", data });
   } catch (error) {
-    console.error("Edit Product Error:", error);
     return NextResponse.json(
       {
+        error,
         msg: "Something went wrong",
-        error: error instanceof Error ? error.message : error,
       },
       { status: 400 }
     );
