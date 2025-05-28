@@ -2,20 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "@/libs/MongoConnect";
 import ContactMessage from "@/libs/models/contactMessage";
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(request: NextRequest, URLParams: { params: { id: string } }) {
   try {
     const body = await request.json();
+    const id = URLParams.params.id;
 
     await connectMongoDB();
 
-    const updatedMessage = await ContactMessage.findByIdAndUpdate(
-      params.id,
-      body,
-      { new: true }
-    );
+    const updatedMessage = await ContactMessage.findByIdAndUpdate(id, body, { new: true });
 
     if (!updatedMessage) {
       return NextResponse.json({ error: "Message not found" }, { status: 404 });
