@@ -1,8 +1,8 @@
 "use client";
+
 import Popup from "@/components/admin-panel/PopupRestock";
 import RestockRow from "@/components/admin-panel/RestockRow";
 import { setLoading } from "@/redux/features/loadingSlice";
-import { setProduct } from "@/redux/features/productSlice";
 import { useAppDispatch } from "@/redux/hooks";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -14,27 +14,27 @@ export interface IProduct {
   name: string;
   description: string;
   price: string;
-  stock: string;
+  stock: string;       // consider changing to number if possible
   category: string;
   sold: number;
 }
 
 const Dashboard = () => {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState<IProduct[]>([]); // <-- Explicitly typed here
   const [openPopup, setOpenPopup] = useState(false);
   const [updateTable, setUpdateTable] = useState(false);
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-  dispatch(setLoading(true));
+    dispatch(setLoading(true));
 
-  axios
-    .get("/api/get_products")
-    .then((res) => setProducts(res.data))
-    .catch((err) => console.log(err))
-    .finally(() => dispatch(setLoading(false)));
-}, [updateTable, dispatch]); // <-- added dispatch here
+    axios
+      .get("/api/get_products")
+      .then((res) => setProducts(res.data))
+      .catch((err) => console.log(err))
+      .finally(() => dispatch(setLoading(false)));
+  }, [updateTable, dispatch]);
 
   return (
     <div>
@@ -54,19 +54,19 @@ const Dashboard = () => {
                 <th>Actions</th>
               </tr>
             </thead>
-      <tbody>
-  {[...products]
-    .sort((a, b) => Number(a.stock) - Number(b.stock))
-    .map((product: IProduct, index) => (
-      <RestockRow
-        key={product._id}
-        srNo={index + 1}
-        setOpenPopup={setOpenPopup}
-        setUpdateTable={setUpdateTable}
-        product={product}
-      />
-  ))}
-</tbody>
+            <tbody>
+              {[...products]
+                .sort((a, b) => Number(a.stock) - Number(b.stock))
+                .map((product: IProduct, index) => (
+                  <RestockRow
+                    key={product._id}
+                    srNo={index + 1}
+                    setOpenPopup={setOpenPopup}
+                    setUpdateTable={setUpdateTable}
+                    product={product}
+                  />
+                ))}
+            </tbody>
           </table>
         </div>
       </div>
