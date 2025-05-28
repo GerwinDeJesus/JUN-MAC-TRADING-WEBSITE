@@ -8,7 +8,7 @@ import Loader from "@/components/admin-panel/Loader";
 import { useSession } from "next-auth/react";
 import Login from "@/components/admin-panel/Login";
 
-const layout = ({ children }: { children: ReactNode }) => {
+const Layout = ({ children }: { children: ReactNode }) => {
   const isLoading = useAppSelector((store) => store.loadingReducer);
   const { data: session } = useSession();
 
@@ -28,4 +28,4 @@ const layout = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export default layout;
+export default Layout;
