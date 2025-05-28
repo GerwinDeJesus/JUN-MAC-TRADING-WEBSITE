@@ -1,51 +1,19 @@
+import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "@/libs/MongoConnect";
 import Product from "@/libs/models/Product";
-import SoldProduct from "@/libs/models/SoldProduct";
-import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(
-    request: NextRequest,
-    { params }: { params: { id: string } }
-  )
- {
+  request: NextRequest,
+  context: { params: { id: string } }
+) {
   try {
-    const id = params.id;
+    const { id } = context.params;
     const body = await request.json();
-
-    const {
-      name,
-      category,
-      stock,
-      price,
-      description,
-      sold,
-      soldQty,
-      expectedRestockDate,
-    } = body;
 
     await connectMongoDB();
 
-    const updatedProduct = await Product.findByIdAndUpdate(
-      id,
-      {
-        name,
-        category,
-        stock,
-        price,
-        description,
-        sold,
-        expectedRestockDate,
-      },
-      { new: true }
-    );
-
-    if (soldQty && soldQty > 0) {
-      await SoldProduct.create({
-        productId: id,
-        name,
-        quantity: soldQty,
-      });
-    }
+    // Example: update the product with given body fields
+    const updatedProduct = await Product.findByIdAndUpdate(id, body, { new: true });
 
     return NextResponse.json({
       msg: "Product Updated Successfully",
