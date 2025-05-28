@@ -26,13 +26,16 @@ interface Props {
 const ProductCard = ({
   id,
   img,
-  category,
   title,
-  stock,
+  category,
   price,
+  stock,
   description,
   expectedRestockDate,
-}: PropsType) => {
+  onClose,
+}: Props) => {
+  // component code here
+
   const dispatch = useAppDispatch();
   const [showPopup, setShowPopup] = useState(false);
 
@@ -93,7 +96,7 @@ const ProductCard = ({
       </div>
 
       {showPopup && (
-        <ProductPopup
+        <ProductCard
           id={id}
           img={img}
           title={title}
