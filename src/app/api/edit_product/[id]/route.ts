@@ -3,9 +3,12 @@ import Product from "@/libs/models/Product";
 import SoldProduct from "@/libs/models/SoldProduct";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(
+  request: NextRequest,
+  context: { params: { id: string } }
+) {
   try {
-    const id = params.id;
+    const id = context.params.id;
     const body = await request.json();
 
     const {
