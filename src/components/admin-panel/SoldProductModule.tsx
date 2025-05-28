@@ -26,48 +26,48 @@ const ProductRow = ({
   const [loadingSoldUpdate, setLoadingSoldUpdate] = useState(false);
   const [soldInput, setSoldInput] = useState<number>(0);
 
-useEffect(() => {
-  const update = async () => {
-    if (soldInput <= 0 || loadingSoldUpdate) return;
+  useEffect(() => {
+    const update = async () => {
+      if (soldInput <= 0 || loadingSoldUpdate) return;
 
-    const delta = soldInput;
-    const newStock = Number(product.stock) - delta;
-    const newSold = (product.sold || 0) + delta;
+      const delta = soldInput;
+      const newStock = Number(product.stock) - delta;
+      const newSold = (product.sold || 0) + delta;
 
-    if (newStock < 0) {
-      makeToast("Not enough stock to sell.");
-      return;
-    }
+      if (newStock < 0) {
+        makeToast("Not enough stock to sell.");
+        return;
+      }
 
-    try {
-      setLoadingSoldUpdate(true);
-      dispatch(setLoading(true));
+      try {
+        setLoadingSoldUpdate(true);
+        dispatch(setLoading(true));
 
-      await axios.put(`/api/update_stock_sold/${product._id}`, {
-        stock: newStock,
-        sold: newSold,
-      });
+        await axios.put(`/api/update_stock_sold/${product._id}`, {
+          stock: newStock,
+          sold: newSold,
+        });
 
-      makeToast("Sold quantity updated successfully!");
-      setUpdateTable(prev => !prev);
-      setSoldInput(0);
-    } catch (error) {
-      console.error(error);
-      makeToast("Failed to update sold quantity.");
-    } finally {
-      dispatch(setLoading(false));
-      setLoadingSoldUpdate(false);
-    }
-  };
+        makeToast("Sold quantity updated successfully!");
+        setUpdateTable(prev => !prev);
+        setSoldInput(0);
+      } catch (error) {
+        console.error(error);
+        makeToast("Failed to update sold quantity.");
+      } finally {
+        dispatch(setLoading(false));
+        setLoadingSoldUpdate(false);
+      }
+    };
 
-  update();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [soldInput, loadingSoldUpdate, dispatch, product._id, product.sold, product.stock, setUpdateTable]);
-
+    update();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [soldInput, loadingSoldUpdate, dispatch, product._id, product.sold, product.stock, setUpdateTable]);
 
   const onEdit = () => {
     dispatch(setProduct({
       ...product,
+      stock: product.stock.toString(),  // Convert stock to string here to match IProduct
       sold: product.sold ?? 0,
       description: ""
     }));
@@ -98,7 +98,6 @@ useEffect(() => {
       <td>
         <div>Stock: {product.stock}</div>
         <div>Sold: {product.sold}</div>
-
       </td>
       <td>{product.price}</td>
       <td className="py-2">
