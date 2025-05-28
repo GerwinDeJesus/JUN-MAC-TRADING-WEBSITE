@@ -9,7 +9,10 @@ const initialState: IProduct = {
   stock: "",
   price: "",
   category: "",
+  description: "", // <-- add this
+  sold: 0,         // <-- add this
 };
+
 
 export const productSlice = createSlice({
   name: "productSlice",
