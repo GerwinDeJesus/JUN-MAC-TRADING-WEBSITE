@@ -10,16 +10,18 @@ import { useState } from "react";
 import ProductPopup from "./ProductPopup"; // import the popup component
 import Image from "next/image";
 
-interface PropsType {
+interface Props {
   id: string;
   img: string;
-  category: string;
   title: string;
-  stock: number;
+  category: string;
   price: number;
+  stock: number;
   description: string;
-  expectedRestockDate?: string | null; // added expectedRestockDate
+  expectedRestockDate?: string | null;
+  onClose: () => void;
 }
+
 
 const ProductCard = ({
   id,
@@ -99,8 +101,8 @@ const ProductCard = ({
           price={price}
           stock={stock}
           description={description}
-          expectedRestockDate={expectedRestockDate} // <--- Pass this prop!
-          onClose={() => setShowPopup(false)}
+          expectedRestockDate={expectedRestockDate} // Pass this prop
+          onClose={() => setShowPopup(false)} // Pass onClose callback
         />
       )}
     </>
