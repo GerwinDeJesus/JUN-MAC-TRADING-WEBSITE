@@ -2,11 +2,17 @@ import { connectMongoDB } from "@/libs/MongoConnect";
 import Product from "@/libs/models/Product";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function PUT(request: NextRequest, context: { params: { id: string } }) {
+export async function PUT(request: NextRequest) {
   try {
     await connectMongoDB();
 
-    const { id } = context.params;
+    const url = new URL(request.url);
+    const id = url.pathname.split("/").pop(); // Get the last segment of the path as ID
+
+    if (!id) {
+      return NextResponse.json({ error: "Product ID missing" }, { status: 400 });
+    }
+
     const body = await request.json();
     const { addStock } = body;
 
