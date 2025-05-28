@@ -14,7 +14,7 @@ interface IPayload {
   category: string;
   stock: string;
   price: string;
-  description: String;
+  description: string;  // <-- lowercase 'string'
 }
 
 const ProductForm = () => {
