@@ -1,13 +1,13 @@
-import { NextRequest, NextResponse, RequestEvent } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "@/libs/MongoConnect";
 import Product from "@/libs/models/Product";
 
 export async function PATCH(
   request: NextRequest,
-  context: RequestEvent
+  { params }: { params: { id: string } }
 ) {
   try {
-    const { id } = context.params;
+    const { id } = params;
     const body = await request.json();
 
     await connectMongoDB();
