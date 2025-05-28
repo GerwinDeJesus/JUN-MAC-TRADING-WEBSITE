@@ -8,6 +8,7 @@ import { useAppDispatch } from "@/redux/hooks";
 import { addToCart } from "@/redux/features/cartSlice";
 import { useState } from "react";
 import ProductPopup from "./ProductPopup"; // import the popup component
+import Image from "next/image";
 
 interface PropsType {
   id: string;
@@ -55,11 +56,14 @@ const ProductCard = ({
         className="border border-gray-200 cursor-pointer"
         onClick={() => setShowPopup(true)}
       >
-        <div className="text-center border-b border-gray-200">
-          <img
-            className="inline-block w-48 h-80 object-cover mx-auto"
+        <div className="text-center border-b border-gray-200 relative w-48 h-80 mx-auto">
+          <Image
             src={img}
             alt={title}
+            fill
+            style={{ objectFit: "cover" }}
+            sizes="192px"
+            priority
           />
         </div>
 
@@ -95,10 +99,9 @@ const ProductCard = ({
           price={price}
           stock={stock}
           description={description}
-          expectedRestockDate={expectedRestockDate}  // <--- Pass this prop!
+          expectedRestockDate={expectedRestockDate} // <--- Pass this prop!
           onClose={() => setShowPopup(false)}
         />
-
       )}
     </>
   );
