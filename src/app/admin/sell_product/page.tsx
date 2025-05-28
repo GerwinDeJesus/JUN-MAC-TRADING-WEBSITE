@@ -25,22 +25,22 @@ const Dashboard = () => {
 
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    dispatch(setLoading(true));
-    axios
-      .get("/api/get_products")
-      .then((res) => {
-        // Make sure stock and sold are numbers (optional)
-        const productsWithNumbers = res.data.map((p: IProduct) => ({
-          ...p,
-          stock: Number(p.stock),
-          sold: p.sold ? Number(p.sold) : 0,
-        }));
-        setProducts(productsWithNumbers);
-      })
-      .catch((err) => console.log(err))
-      .finally(() => dispatch(setLoading(false)));
-  }, [updateTable]);
+ useEffect(() => {
+  dispatch(setLoading(true));
+  axios
+    .get("/api/get_products")
+    .then((res) => {
+      const productsWithNumbers = res.data.map((p: IProduct) => ({
+        ...p,
+        stock: Number(p.stock),
+        sold: p.sold ? Number(p.sold) : 0,
+      }));
+      setProducts(productsWithNumbers);
+    })
+    .catch((err) => console.log(err))
+    .finally(() => dispatch(setLoading(false)));
+}, [updateTable, dispatch]); // Added dispatch here
+
 
   return (
     <div>

@@ -27,19 +27,19 @@ const ZeroStockDashboard = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(setLoading(true));
+  dispatch(setLoading(true));
 
-    axios
-      .get("/api/get_products")
-      .then((res) => {
-        const zeroStock = res.data.filter(
-          (product: IProduct) => Number(product.stock) === 0
-        );
-        setProducts(zeroStock);
-      })
-      .catch((err) => console.log(err))
-      .finally(() => dispatch(setLoading(false)));
-  }, [updateTable]);
+  axios
+    .get("/api/get_products")
+    .then((res) => {
+      const zeroStock = res.data.filter(
+        (product: IProduct) => Number(product.stock) === 0
+      );
+      setProducts(zeroStock);
+    })
+    .catch((err) => console.log(err))
+    .finally(() => dispatch(setLoading(false)));
+}, [updateTable, dispatch]);  // <-- Add dispatch here
 
   return (
     <div>
