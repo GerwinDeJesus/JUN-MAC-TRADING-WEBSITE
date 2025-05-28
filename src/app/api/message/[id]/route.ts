@@ -1,11 +1,11 @@
+import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "@/libs/MongoConnect";
 import ContactMessage from "@/libs/models/contactMessage";
-import { NextRequest, NextResponse } from "next/server";
 
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, context: any) {
   try {
-    const { id } = params;
     const body = await request.json();
+    const id = context.params.id;
 
     await connectMongoDB();
 
