@@ -2,14 +2,15 @@ import { AiOutlineClose } from "react-icons/ai";
 import Image from "next/image";
 
 interface Props {
+  id: string;
   img: string;
   title: string;
-  description: string;
-  onClose: () => void;
+  category: string;
   price: number;
   stock: number;
-  category: string;
+  description: string;
   expectedRestockDate?: string | null;
+  onClose: () => void;
 }
 
 const ProductPopup = ({
