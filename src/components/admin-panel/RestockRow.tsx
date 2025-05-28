@@ -1,5 +1,3 @@
-// app/components/admin-panel/RestockRow.tsx
-
 import React, { Dispatch, SetStateAction } from "react";
 import Image from "next/image";
 import { CiEdit } from "react-icons/ci";
@@ -10,10 +8,6 @@ import { setProduct } from "@/redux/features/productSlice";
 import axios from "axios";
 import { setLoading } from "@/redux/features/loadingSlice";
 import { makeToast } from "@/utils/helper";
-import dbConnect from "@/lib/MongoConnect";
-import { connectMongoDB } from "@/lib/mongodb";  // match your file path
-
-
 
 interface PropsType {
   srNo: number;
@@ -80,7 +74,7 @@ const RestockRow = ({
       <td>{product.category}</td>
       <td>
         <span
-          className={`$ {
+          className={`${
             Number(product.stock) <= 5 ? "text-red-500 font-bold" : ""
           }`}
         >
