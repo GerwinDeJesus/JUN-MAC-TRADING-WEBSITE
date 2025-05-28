@@ -28,18 +28,17 @@ const PopupSold = ({ setOpenPopup, setUpdateTable }: PropsType) => {
       return;
     }
 
-    if (soldQuantity > productData.stock) {
+    if (soldQuantity > Number(productData.stock)) {
       makeToast("Sold quantity cannot be greater than stock.");
       return;
     }
 
-        const updatedProduct = {
-        ...productData,
-        sold: (productData.sold || 0) + soldQuantity,
-        stock: productData.stock - soldQuantity,
-        soldQty: soldQuantity, // ✅ Add this
-      };
-
+    const updatedProduct = {
+      ...productData,
+      sold: (productData.sold || 0) + soldQuantity,
+      stock: Number(productData.stock) - soldQuantity,
+      soldQty: soldQuantity, // ✅ Add this if needed
+    };
 
     try {
       dispatch(setLoading(true));
@@ -65,12 +64,15 @@ const PopupSold = ({ setOpenPopup, setUpdateTable }: PropsType) => {
 
         <h2 className="text-2xl mb-6">Add Sold Quantity</h2>
 
-        <p className="mb-2">Product: <strong>{productData.name}</strong></p>
-        <p className="mb-2">Current Stock: <strong>{productData.stock}</strong></p>
+        <p className="mb-2">
+          Product: <strong>{productData.name}</strong>
+        </p>
+        <p className="mb-2">
+          Current Stock: <strong>{productData.stock}</strong>
+        </p>
         <p className="mb-4">
-           Updated Sold:{" "}
-         <strong>{(productData.sold || 0) + soldInput}</strong>
-</p>
+          Updated Sold: <strong>{(productData.sold || 0) + soldInput}</strong>
+        </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
