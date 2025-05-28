@@ -1,4 +1,5 @@
 import { AiOutlineClose } from "react-icons/ai";
+import Image from "next/image";
 
 interface Props {
   img: string;
@@ -47,11 +48,14 @@ const ProductPopup = ({
         {/* Content */}
         <div className="flex flex-col md:flex-row gap-6">
           {/* Product Image */}
-          <div className="w-full md:w-1/3">
-            <img
+          <div className="w-full md:w-1/3 relative h-[400px]">
+            <Image
               src={img || "/placeholder.jpg"}
               alt={title}
-              className="w-full h-100 object-cover rounded-lg"
+              layout="fill"
+              objectFit="cover"
+              className="rounded-lg"
+              priority={true}
             />
           </div>
 
@@ -70,7 +74,6 @@ const ProductPopup = ({
               Price: ₱{price.toLocaleString()}
             </p>
             <p className="text-md text-gray-600 mb-2">Stock: {stock}</p>
-
           </div>
         </div>
       </div>
