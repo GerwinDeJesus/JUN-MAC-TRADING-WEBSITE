@@ -1,0 +1,63 @@
+import { signIn } from "next-auth/react";
+import React, { useState } from "react";
+import { FcGoogle } from "react-icons/fc";
+
+const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    // You can add credential-based sign-in here if using credentials provider in NextAuth
+    await signIn("credentials", {
+      redirect: false,
+      email,
+      password,
+    });
+  };
+
+  return (
+    <div className="bg-white min-h-screen grid place-items-center">
+      <div className="bg-gray-100 p-8 rounded-xl shadow-lg w-full max-w-md">
+        <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
+
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="border border-gray-300 p-2 rounded"
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="border border-gray-300 p-2 rounded"
+            required
+          />
+          <button
+            type="submit"
+            className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+          >
+            Sign In
+          </button>
+        </form>
+
+        <div className="my-6 text-center text-gray-500">or</div>
+
+        <button
+          className="w-full bg-white border px-4 py-2 flex justify-center items-center gap-2 rounded hover:bg-gray-100"
+          onClick={() => signIn("google")}
+        >
+          <FcGoogle size={24} />
+          Sign In with Google
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default Login;
