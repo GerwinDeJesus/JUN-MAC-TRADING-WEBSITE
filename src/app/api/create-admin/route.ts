@@ -1,37 +1,21 @@
-// scripts/createAdmin.ts
 import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
-import User from "@/libs/models/User"; // your Mongoose User model
-import dotenv from "dotenv";
-
-dotenv.config(); // load .env variables
+import User from "@/libs/models/User";
 
 const createAdmin = async () => {
   try {
-    if (!process.env.MONGO_URI) {
-      throw new Error("Missing MONGO_URI environment variable");
-    }
-
-    await mongoose.connect(process.env.MONGO_URI);
-
-    // Check if admin already exists
-    const existingAdmin = await User.findOne({ email: "admin12345@gmail.com" });
-    if (existingAdmin) {
-      console.log("Admin user already exists.");
-      process.exit(0);
-    }
-
+    await mongoose.connect(process.env.MONGO_URL!); // Ensure this matches your .env
     const hashed = await bcrypt.hash("Admin12345", 10);
     await User.create({
       name: "Admin",
       email: "admin12345@gmail.com",
       password: hashed,
-      role: "admin", // optional
+      role: "admin",
     });
-    console.log("Admin user created successfully");
+    console.log("✅ Admin user created");
     process.exit(0);
   } catch (error) {
-    console.error("Failed to create admin user:", error);
+    console.error("❌ Failed to create admin:", error);
     process.exit(1);
   }
 };

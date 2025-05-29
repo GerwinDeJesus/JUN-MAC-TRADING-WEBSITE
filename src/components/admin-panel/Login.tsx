@@ -3,7 +3,7 @@
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation'; // ✅ For App Router
 import { useState } from 'react';
-import { FcGoogle } from 'react-icons/fc';
+
 
 // ... rest of your code stays the same
 
@@ -61,16 +61,6 @@ const Login = () => {
             Sign In
           </button>
         </form>
-
-        <div className="my-6 text-center text-gray-500">or</div>
-
-        <button
-          className="w-full bg-white border px-4 py-2 flex justify-center items-center gap-2 rounded hover:bg-gray-100"
-          onClick={() => signIn("google")}
-        >
-          <FcGoogle size={24} />
-          Sign In with Google
-        </button>
       </div>
     </div>
   );
