@@ -19,9 +19,9 @@ const Navbar = ({ setShowCart }: propsType) => {
             <Image
               src="/blacklogo.png"
               alt="Logo"
-              fill
-              style={{ objectFit: "contain" }}
-              priority
+             width={120}  // Set appropriate width
+            height={120} // Set appropriate height
+            className="ml-auto"
             />
           </div>
 
@@ -43,7 +43,7 @@ const Navbar = ({ setShowCart }: propsType) => {
               </div>
 
               <div>
-                <p className="text-gray-500">Hello, Gerwin</p>
+                <p className="text-gray-500">Hello, User</p>
                 <p className="font-medium">Your Account</p>
               </div>
             </div>

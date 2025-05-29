@@ -30,7 +30,7 @@ const Hero = () => {
         <div>
           <Image
             src="/bg1.png"
-            alt="hero"
+            alt="background picture"
             width={500}  // Set appropriate width
             height={400} // Set appropriate height
             className="ml-auto"
