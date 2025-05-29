@@ -1,23 +1,22 @@
+// /app/api/create-admin/route.ts
+import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
 import User from "@/libs/models/User";
 
-const createAdmin = async () => {
-  try {
-    await mongoose.connect(process.env.MONGO_URL!); // Ensure this matches your .env
-    const hashed = await bcrypt.hash("Admin12345", 10);
-    await User.create({
-      name: "Admin",
-      email: "admin12345@gmail.com",
-      password: hashed,
-      role: "admin",
-    });
-    console.log("✅ Admin user created");
-    process.exit(0);
-  } catch (error) {
-    console.error("❌ Failed to create admin:", error);
-    process.exit(1);
+export async function GET(req: Request) {
+  if (process.env.CREATE_ADMIN_SECRET !== req.headers.get("x-secret")) {
+    return new NextResponse("Unauthorized", { status: 401 });
   }
-};
 
-createAdmin();
+  await mongoose.connect(process.env.MONGO_URI!);
+  const hashed = await bcrypt.hash("Admin12345", 10);
+  await User.create({
+    name: "Admin",
+    email: "admin12345@gmail.com",
+    password: hashed,
+    role: "admin",
+  });
+
+  return NextResponse.json({ message: "Admin created" });
+}
