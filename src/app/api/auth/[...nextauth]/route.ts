@@ -1,11 +1,9 @@
-// app/api/auth/[...nextauth]/route.ts
 import NextAuth from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { MongoClient } from "mongodb";
-import bcrypt from "bcryptjs";
-
-const client = new MongoClient(process.env.MONGO_URI!);
+import GoogleProvider from "next-auth/providers/google";
+import { compare } from "bcryptjs"; // to verify password
+import { connectDB } from "@/libs/db"; // your MongoDB connection
+import User from "@/libs/models/User"; // your User model
 
 const handler = NextAuth({
   providers: [
@@ -14,43 +12,46 @@ const handler = NextAuth({
       clientSecret: process.env.CLIENT_SECRET!,
     }),
     CredentialsProvider({
-      name: "Credentials",
+      name: "credentials",
       credentials: {
-        email: { label: "Email", type: "email" },
+        email: { label: "Email", type: "email", placeholder: "you@example.com" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        await client.connect();
-        const db = client.db();
-        const user = await db.collection("users").findOne({ email: credentials?.email });
+        try {
+          // Check if credentials exist
+          if (!credentials) {
+            throw new Error("Missing credentials");
+          }
 
-        if (!user) return null;
+          // Connect to DB
+          await connectDB();
 
-        const isValid = bcrypt.compareSync(credentials!.password, user.password);
-        if (!isValid) return null;
+          // Find user by email
+          const user = await User.findOne({ email: credentials.email });
+          if (!user) {
+            throw new Error("No user found with this email");
+          }
 
-        return {
-          id: user._id.toString(),
-          name: user.name,
-          email: user.email,
-        };
+          // Verify password
+          const isValid = await compare(credentials.password, user.password);
+          if (!isValid) {
+            throw new Error("Incorrect password");
+          }
+
+          // Return user object for session
+          return { id: user._id.toString(), name: user.name, email: user.email };
+        } catch (error) {
+          console.error("Authorize error:", error);
+          return null; // Return null for failed login to trigger 401
+        }
       },
     }),
   ],
-  secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: "jwt",
   },
-  callbacks: {
-    async jwt({ token, user }) {
-      if (user) token.user = user;
-      return token;
-    },
-    async session({ session, token }) {
-      session.user = token.user;
-      return session;
-    },
-  },
+  secret: process.env.NEXTAUTH_SECRET,
 });
 
 export { handler as GET, handler as POST };

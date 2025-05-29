@@ -1,34 +1,39 @@
-// app/api/create-admin/route.ts
-import { NextRequest, NextResponse } from "next/server";
-import { MongoClient } from "mongodb";
+// scripts/createAdmin.ts
 import bcrypt from "bcryptjs";
+import mongoose from "mongoose";
+import User from "@/libs/models/User"; // your Mongoose User model
+import dotenv from "dotenv";
 
-const client = new MongoClient(process.env.MONGO_URI!);
+dotenv.config(); // load .env variables
 
-export async function POST(req: NextRequest) {
-  const authHeader = req.headers.get("authorization");
-  if (authHeader !== `Bearer ${process.env.ADMIN_CREATION_SECRET}`) {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-  }
-
+const createAdmin = async () => {
   try {
-    await client.connect();
-    const db = client.db();
-
-    const body = await req.json();
-    const { name, email, password } = body;
-
-    if (!email || !password || !name) {
-      return NextResponse.json({ message: "Missing fields" }, { status: 400 });
+    if (!process.env.MONGO_URI) {
+      throw new Error("Missing MONGO_URI environment variable");
     }
 
-    const hashedPassword = bcrypt.hashSync(password, 10);
-    const result = await db.collection("users").insertOne({ name, email, password: hashedPassword });
+    await mongoose.connect(process.env.MONGO_URI);
 
-    return NextResponse.json({ message: "Admin created", id: result.insertedId }, { status: 201 });
+    // Check if admin already exists
+    const existingAdmin = await User.findOne({ email: "admin12345@gmail.com" });
+    if (existingAdmin) {
+      console.log("Admin user already exists.");
+      process.exit(0);
+    }
+
+    const hashed = await bcrypt.hash("Admin12345", 10);
+    await User.create({
+      name: "Admin",
+      email: "admin12345@gmail.com",
+      password: hashed,
+      role: "admin", // optional
+    });
+    console.log("Admin user created successfully");
+    process.exit(0);
   } catch (error) {
-    return NextResponse.json({ message: "Error creating admin", error }, { status: 500 });
-  } finally {
-    await client.close();
+    console.error("Failed to create admin user:", error);
+    process.exit(1);
   }
-}
+};
+
+createAdmin();
