@@ -10,10 +10,9 @@ const Navbar = () => {
       <h2 className="text-xl">Admin Panel</h2>
 
       <Image
-        className="rounded-full cursor-pointer"
-        src={session?.user?.image!}
-        height={40}
-        width={40}
+        src="/logout.png"
+        height={50}
+        width={50}
         alt="dp"
         onClick={() => signOut()}
       />
