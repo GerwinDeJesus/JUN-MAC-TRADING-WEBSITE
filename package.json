@@ -14,6 +14,7 @@
     "@uploadthing/react": "^6.8.0",
     "axios": "^1.6.5",
     "bcryptjs": "^3.0.2",
+    "dotenv": "^16.5.0",
     "mongodb": "^6.16.0",
     "mongoose": "^8.1.0",
     "next": "^15.4.0-canary.55",
