@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
       fileKey,
       name,
       category,
-      sold,
+      sold = 0,
       stock,
       price,
       description,
