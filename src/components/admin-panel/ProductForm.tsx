@@ -56,13 +56,25 @@ const ProductForm = () => {
 
   return (
     <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-      <Image
-        className="max-h-[300px] w-auto object-contain rounded-md"
-        src={payload.imgSrc ? payload.imgSrc : "/placeholder.jpg"}
-        width={800}
-        height={500}
-        alt="Product Image"
-      />
+      <div className="relative w-full max-w-md">
+        <Image
+          className="max-h-[300px] w-full object-contain rounded-md"
+          src={payload.imgSrc ? payload.imgSrc : "/placeholder.jpg"}
+          width={800}
+          height={500}
+          alt="Product Image"
+        />
+        {payload.imgSrc && (
+          <button
+            type="button"
+            onClick={() => setPayload({ ...payload, imgSrc: null, fileKey: null })}
+            className="absolute top-2 right-2 bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm hover:bg-red-700"
+          >
+            ✕
+          </button>
+        )}
+      </div>
+
 
       <UploadButton
         endpoint="imageUploader"
