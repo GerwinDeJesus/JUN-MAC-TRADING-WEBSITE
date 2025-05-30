@@ -6,7 +6,7 @@ export async function PUT(request: NextRequest, URLParams: any) {
   try {
     const body = await request.json();
     const id = URLParams.params.id;
-    const { name, category, price, stock, description } = body;
+    const { name, category, price, stock, description, sold, soldQty, expectedRestockDate } = body;
 
     await connectMongoDB();
 
@@ -18,6 +18,9 @@ export async function PUT(request: NextRequest, URLParams: any) {
       price,
       stock,
       description,
+      sold,
+      expectedRestockDate,
+      soldQty,
     });
 
     return NextResponse.json({ msg: "Product Updated Successfully", data });

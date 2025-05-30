@@ -1,43 +1,57 @@
 import { Schema, model, models } from "mongoose";
 
+const SalesSchema = new Schema({
+  date: {
+    type: String,  // You can also use Date type if you prefer
+    required: true,
+  },
+  quantity: {
+    type: Number,
+    required: true,
+  },
+});
+
 const productSchema = new Schema({
   imgSrc: {
     type: String,
-    require: true,
+    required: true,
   },
   fileKey: {
     type: String,
-    require: true,
+    required: true,
   },
   name: {
     type: String,
-    require: true,
+    required: true,
   },
   category: {
     type: String,
-    require: true,
+    required: true,
   },
   stock: {
     type: Number,
-    require: true,
+    required: true,
   },
   price: {
     type: String,
-    require: true,
+    required: true,
   },
   sold: {
     type: Number,
-    require: true,
+    required: true,
   },
   description: {
     type: String,
-    require: true,  
+    required: true,  
   },
   expectedRestockDate: {
-  type: Date,
-  default: null,
-}
-
+    type: Date,
+    default: null,
+  },
+  sales: {
+    type: [SalesSchema],  // <-- This defines an array of sales subdocuments
+    default: [],
+  },
 });
 
 const Product = models.Product || model("Product", productSchema);
